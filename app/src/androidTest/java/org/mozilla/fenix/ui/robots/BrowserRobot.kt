@@ -665,6 +665,11 @@ private fun assertNavURLBar() = assertTrue(navURLBar().waitForExists(waitingTime
 
 private fun assertNavURLBarHidden() = assertTrue(navURLBar().waitUntilGone(waitingTime))
 
+private fun assertEnhancedTrackingProtectionSwitch() {
+    withText(R.id.trackingProtectionSwitch)
+        .matches(withEffectiveVisibility(Visibility.VISIBLE))
+}
+
 private fun assertSecureConnectionLockIcon() {
     onView(withId(R.id.mozac_browser_toolbar_security_indicator))
         .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
@@ -686,13 +691,11 @@ private fun mediaPlayerPlayButton() =
             .text("Play")
     )
 
-fun clickTabCrashedRestoreButton() {
+// WebRtc test page elements & permission prompts
+private val cameraButton = mDevice.findObject(UiSelector().text("Camera"))
 
-    assertTrue(
-        mDevice.findObject(UiSelector().resourceId("$packageName:id/restoreTabButton"))
-            .waitForExists(waitingTime)
-    )
+private val microphoneButton = mDevice.findObject(UiSelector().text("Microphone"))
 
-    val tabCrashRestoreButton = mDevice.findObject(UiSelector().resourceIdMatches("$packageName:id/restoreTabButton"))
-    tabCrashRestoreButton.click()
-}
+private val cameraAndMicrophoneButton = mDevice.findObject(UiSelector().text("Camera & microphone"))
+
+
