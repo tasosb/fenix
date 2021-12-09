@@ -12,6 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mozilla.fenix.helpers.AndroidAssetDispatcher
 import org.mozilla.fenix.helpers.HomeActivityIntentTestRule
+import org.mozilla.fenix.ui.robots.browserScreen
 import org.mozilla.fenix.ui.robots.navigationToolbar
 
 /**
@@ -40,44 +41,56 @@ class SitePermissionsTest {
     }
 
     @Test
-    fun microphonePermissionPromptTest() {
+    fun denyMicrophonePermissionPromptTest() {
         val webRTCtestPage = "https://mozilla.github.io/webrtc-landing/gum_test.html"
         val testPageSubstring = "https://mozilla.github.io:443"
 
         navigationToolbar {
         }.enterURLAndEnterToBrowser(webRTCtestPage.toUri()) {
         }.clickStartMicrophoneButton {
-            // clickAppPermissionButton(false)
-//        }
-//        browserScreen {
-//        }.clickStartMicrophoneButton {
-            //clickAppPermissionButton(true)
             verifyMicrophonePermissionPrompt(testPageSubstring)
         }.clickPagePermissionButton(false) {
             verifyPageContent("NotAllowedError")
+        }
+    }
+
+    @Test
+    fun allowMicrophonePermissionPromptTest() {
+        val webRTCtestPage = "https://mozilla.github.io/webrtc-landing/gum_test.html"
+        val testPageSubstring = "https://mozilla.github.io:443"
+
+        navigationToolbar {
+        }.enterURLAndEnterToBrowser(webRTCtestPage.toUri()) {
         }.clickStartMicrophoneButton {
+            verifyMicrophonePermissionPrompt(testPageSubstring)
         }.clickPagePermissionButton(true) {
             verifyPageContent("Success!")
         }
     }
 
     @Test
-    fun cameraPermissionPromptTest() {
+    fun denyCameraPermissionPromptTest() {
         val testPage = "https://mozilla.github.io/webrtc-landing/gum_test.html"
         val testPageSubstring = "https://mozilla.github.io:443"
 
         navigationToolbar {
         }.enterURLAndEnterToBrowser(testPage.toUri()) {
         }.clickStartCameraButton {
-//            clickAppPermissionButton(false)
-//        }
-//        browserScreen {
-//        }.clickStartCameraButton {
-//            clickAppPermissionButton(true)
             verifyCameraPermissionPrompt(testPageSubstring)
         }.clickPagePermissionButton(false) {
             verifyPageContent("NotAllowedError")
+        }
+    }
+
+    @Test
+    fun allowCameraPermissionPromptTest() {
+        val testPage = "https://mozilla.github.io/webrtc-landing/gum_test.html"
+        val testPageSubstring = "https://mozilla.github.io:443"
+
+        navigationToolbar {
+        }.enterURLAndEnterToBrowser(testPage.toUri()) {
         }.clickStartCameraButton {
+            verifyCameraPermissionPrompt(testPageSubstring)
         }.clickPagePermissionButton(true) {
             verifyPageContent("Success!")
         }
@@ -90,40 +103,15 @@ class SitePermissionsTest {
 
         navigationToolbar {
         }.enterURLAndEnterToBrowser(testPage.toUri()) {
+        }.clickStartCameraAndMicrophoneButton { }
+        browserScreen {
         }.clickStartCameraAndMicrophoneButton {
-            // click permission for video then for audio
-//            clickAppPermissionButton(false)
-//            clickAppPermissionButton(false)
-//        }
-//        browserScreen {
-//        }.clickStartCameraAndMicrophoneButton {
-            // click permission for video then for audio
-//            clickAppPermissionButton(true)
-//            clickAppPermissionButton(true)
             verifyCameraAndMicPermissionPrompt(testPageSubstring)
         }.clickPagePermissionButton(false) {
             verifyPageContent("NotAllowedError")
         }.clickStartCameraAndMicrophoneButton {
         }.clickPagePermissionButton(true) {
             verifyPageContent("Success!")
-        }
-    }
-
-    @Test
-    fun blockNotificationsPermissionPromptTest() {
-        val testPage = "https://mozilla-mobile.github.io/testapp/"
-        val testPageSubstring = "https://mozilla-mobile.github.io:443"
-
-        navigationToolbar {
-        }.enterURLAndEnterToBrowser(testPage.toUri()) {
-        }.clickOpenNotificationButton {
-            verifyNotificationsPermissionPrompt(testPageSubstring)
-//        }.clickPagePermissionButton(true) {
-//            // the test page needs some functionality here
-//        }.clickOpenNotificationButton {
-        }.clickPagePermissionButton(false) {
-        }.clickOpenNotificationButton {
-            verifyNotificationsPermissionPrompt(testPageSubstring, true)
         }
     }
 }
